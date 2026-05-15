@@ -1,6 +1,6 @@
 """
 FastAPI entry point — Tech Domain Graph RAG Knowledge Assistant.
-"""
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
@@ -57,3 +57,72 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
+    """
+
+
+"""
+FastAPI entry point — Minimal Azure startup test.
+"""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+# COMMENTED TEMPORARILY FOR DEBUGGING
+# from backend.config import config
+# from backend.api.routes import upload, graph, query, comparison
+
+app = FastAPI(
+    title="Tech Graph RAG Knowledge Assistant",
+    version="2.0.0",
+    description="Minimal startup test",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# COMMENTED TEMPORARILY
+# app.include_router(upload.router)
+# app.include_router(graph.router)
+# app.include_router(query.router)
+# app.include_router(comparison.router)
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Azure deployment working",
+        "status": "running",
+    }
+
+
+@app.get("/health")
+async def health():
+    return {
+        "status": "ok"
+    }
+
+
+# COMMENTED TEMPORARILY
+# @app.get("/health")
+# async def health():
+#     from backend.database.neo4j_client import Neo4jClient
+#     neo4j = Neo4jClient()
+#     stats = neo4j.get_graph_stats()
+#     neo4j.close()
+#     return {"status": "ok", "neo4j": stats}
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(
+        "backend.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True
+    )
